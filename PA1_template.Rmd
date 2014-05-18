@@ -26,8 +26,8 @@ ggplot(daily_steps, aes(x=Date, y=Steps)) +
   scale_x_date(labels = date_format("%m-%d"))
 ```
   
-**Mean: 9354
-**Median: 10395
+Mean: 9354
+Median: 10395
 
 ## What is the average daily activity pattern?
 
@@ -43,6 +43,8 @@ ggplot(interval_steps, aes(x=num, y=Steps)) +
   theme_bw() +
   labs(x = "Interval", y = "Total number of steps")
 ```
+
+Maximum activity is observed in interval `r max_interval`.
 
 ## Imputing missing values
 

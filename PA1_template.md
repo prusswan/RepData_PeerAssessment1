@@ -31,8 +31,8 @@ ggplot(daily_steps, aes(x = Date, y = Steps)) + geom_bar(stat = "identity") +
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2.png) 
 
   
-**Mean: 9354
-**Median: 10395
+Mean: 9354
+Median: 10395
 
 ## What is the average daily activity pattern?
 
@@ -55,6 +55,8 @@ ggplot(interval_steps, aes(x = num, y = Steps)) + geom_bar(stat = "identity") +
 
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
 
+
+Maximum activity is observed in interval 104.
 
 ## Imputing missing values
 
