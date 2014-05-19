@@ -25,6 +25,10 @@ ggplot(daily_steps, aes(x=Date, y=Steps)) +
   labs(x = "Day", y = "Total number of steps") +
   scale_x_date(labels = date_format("%m-%d"))
 ```
+
+```{r, echo=TRUE}
+summary(daily_steps)
+```
   
 Mean: 9354
 Median: 10395
@@ -44,11 +48,37 @@ ggplot(interval_steps, aes(x=num, y=Steps)) +
   labs(x = "Interval", y = "Total number of steps")
 ```
 
+```{r, echo=TRUE}
+summary(interval_steps)
+```
+
 Maximum activity is observed in interval `r max_interval`.
 
 ## Imputing missing values
 
+Missing values are imputed with the mean value at the corrresponding interval.
 
+```{r, echo=TRUE}
+missing <- which(is.na(data$steps))
+temp <- interval_steps
+imputed_steps <- data$steps
+imputed_steps[missing] <- unlist(lapply(missing, FUN=function(idx){
+  interval = data[idx,]$interval
+  temp[temp$Interval == interval,]$Steps
+}))
+
+imputed_data <- data.frame(steps=imputed_steps, date = data$date, interval = data$interval)
+
+ggplot(imputed_data, aes(x=date, y=steps)) +
+  geom_bar(stat = "identity") +
+  theme_bw() +
+  labs(x = "Day", y = "Total number of steps") +
+  scale_x_date(labels = date_format("%m-%d"))
+```
+
+```{r, echo=TRUE}
+summary(imputed_data)
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
 

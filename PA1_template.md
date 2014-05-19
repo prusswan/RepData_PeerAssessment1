@@ -30,6 +30,22 @@ ggplot(daily_steps, aes(x = Date, y = Steps)) + geom_bar(stat = "identity") +
 
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2.png) 
 
+
+
+```r
+summary(daily_steps)
+```
+
+```
+##       Date                Steps      
+##  Min.   :2012-10-01   Min.   :    0  
+##  1st Qu.:2012-10-16   1st Qu.: 6778  
+##  Median :2012-10-31   Median :10395  
+##  Mean   :2012-10-31   Mean   : 9354  
+##  3rd Qu.:2012-11-15   3rd Qu.:12811  
+##  Max.   :2012-11-30   Max.   :21194
+```
+
   
 Mean: 9354
 Median: 10395
@@ -53,13 +69,66 @@ ggplot(interval_steps, aes(x = num, y = Steps)) + geom_bar(stat = "identity") +
 ## Warning: position_stack requires constant width: output may be incorrect
 ```
 
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
+
+
+
+```r
+summary(interval_steps)
+```
+
+```
+##     Interval       Steps             num       
+##  0      :  1   Min.   :  0.00   Min.   :  1.0  
+##  5      :  1   1st Qu.:  2.49   1st Qu.: 72.8  
+##  10     :  1   Median : 34.11   Median :144.5  
+##  15     :  1   Mean   : 37.38   Mean   :144.5  
+##  20     :  1   3rd Qu.: 52.83   3rd Qu.:216.2  
+##  25     :  1   Max.   :206.17   Max.   :288.0  
+##  (Other):282
+```
 
 
 Maximum activity is observed in interval 104.
 
 ## Imputing missing values
 
+Missing values are imputed with the mean value at the corrresponding interval.
+
+
+```r
+missing <- which(is.na(data$steps))
+temp <- interval_steps
+imputed_steps <- data$steps
+imputed_steps[missing] <- unlist(lapply(missing, FUN = function(idx) {
+    interval = data[idx, ]$interval
+    temp[temp$Interval == interval, ]$Steps
+}))
+
+imputed_data <- data.frame(steps = imputed_steps, date = data$date, interval = data$interval)
+
+ggplot(imputed_data, aes(x = date, y = steps)) + geom_bar(stat = "identity") + 
+    theme_bw() + labs(x = "Day", y = "Total number of steps") + scale_x_date(labels = date_format("%m-%d"))
+```
+
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6.png) 
+
+
+
+```r
+summary(imputed_data)
+```
+
+```
+##      steps            date               interval    
+##  Min.   :  0.0   Min.   :2012-10-01   0      :   61  
+##  1st Qu.:  0.0   1st Qu.:2012-10-16   5      :   61  
+##  Median :  0.0   Median :2012-10-31   10     :   61  
+##  Mean   : 37.4   Mean   :2012-10-31   15     :   61  
+##  3rd Qu.: 27.0   3rd Qu.:2012-11-15   20     :   61  
+##  Max.   :806.0   Max.   :2012-11-30   25     :   61  
+##                                       (Other):17202
+```
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
@@ -96,5 +165,5 @@ ggplot(data_by_weekday, aes(x = num, y = Steps)) + geom_bar(stat = "identity") +
 ## Warning: position_stack requires constant width: output may be incorrect
 ```
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
+![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8.png) 
 
