@@ -24,8 +24,7 @@ names(daily_steps)[2] <- c("Steps")
 library(ggplot2)
 library(scales)
 
-ggplot(daily_steps, aes(x = Date, y = Steps)) + geom_bar(stat = "identity") + 
-    theme_bw() + labs(x = "Day", y = "Total number of steps") + scale_x_date(labels = date_format("%m-%d"))
+ggplot(daily_steps, aes(Steps)) + geom_histogram(binwidth = 1000) + theme_bw()
 ```
 
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2.png) 
@@ -107,8 +106,11 @@ imputed_steps[missing] <- unlist(lapply(missing, FUN = function(idx) {
 
 imputed_data <- data.frame(steps = imputed_steps, date = data$date, interval = data$interval)
 
-ggplot(imputed_data, aes(x = date, y = steps)) + geom_bar(stat = "identity") + 
-    theme_bw() + labs(x = "Day", y = "Total number of steps") + scale_x_date(labels = date_format("%m-%d"))
+ggplot(imputed_data, aes(steps)) + geom_histogram() + theme_bw()
+```
+
+```
+## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
 ```
 
 ![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6.png) 
